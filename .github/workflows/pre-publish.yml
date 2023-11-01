@@ -13,10 +13,16 @@ permissions:
 jobs:
   pypi-publish-test:
     runs-on: ubuntu-latest
+    
     permissions:
       id-token: write
-
+      
+    environment:
+      name: pypi
+      url: https://test.pypi.org/p/academic_markdown
+      
     steps:
+    
     - uses: actions/checkout@v3
     - name: Set up Python
       uses: actions/setup-python@v3
@@ -32,6 +38,7 @@ jobs:
       run: python -m build
       
     - name: Publish package
-      uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+      # uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+      uses: pypa/gh-action-pypi-publish@release/v1.8
       with:
         repository-url: https://test.pypi.org/legacy/
