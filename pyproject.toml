@@ -26,8 +26,8 @@ classifiers = [
 academic_markdown = "academic_markdown:app"
 
 [project.urls]
-"Homepage" = "https://github.com/cochaviz/academic_markdown"
-"Bug Tracker" = "https://github.com/cochaviz/academic_markdown/issues"
+"Homepage" = "https://github.com/cochaviz/academic_markdown_cli"
+"Bug Tracker" = "https://github.com/cochaviz/academic_markdown_cli/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]
