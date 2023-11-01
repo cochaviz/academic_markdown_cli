@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import argparse
 import os
 import io
 import yaml
@@ -13,7 +12,10 @@ import glob
 
 import typer
 
+from importlib.resources import files
+
 app = typer.Typer()
+APP_NAME = "academic_markdown"
 
 def _open_file(filename: str | None, programs: list[str] = ["code", "xdg-open"]):
     if filename is None:
@@ -268,7 +270,7 @@ def check_health(
     docker: bool = False, 
     #  **_ # throw away all other added arguments
 ):  
-    health_check = ["./scripts/check_health.sh"]
+    health_check = [str(files("scripts").joinpath("check_health.sh"))]
 
     if docker:
         health_check.append("--docker")
@@ -276,4 +278,4 @@ def check_health(
     exit(subprocess.run(health_check).returncode)
 
 if __name__=="__main__":
-    app()
+    app(prog_name=APP_NAME)
