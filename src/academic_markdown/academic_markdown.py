@@ -158,7 +158,7 @@ def subprocess_run_info(command: list[str], *args) -> subprocess.CompletedProces
 def options_source_markdown(source, source_files, target) -> list[str]:
     options = [
         "--from=markdown+mark",
-        "--filter=mermaid-filter",
+        # "--filter=mermaid-filter",
         "--filter=pandoc-crossref",
         "--citeproc",
         "--metadata=codeBlockCaptions",
