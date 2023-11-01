@@ -1,11 +1,10 @@
-# Builds on push to main and publishes to the TESTING PiPY repository
+# Builds on release and publishes to the PiPY repository
 
 name: Publish Bleeding-Edge Build
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [published]
 
 permissions:
   contents: read
@@ -19,7 +18,7 @@ jobs:
 
     environment:
       name: pypi
-      url: https://test.pypi.org/p/academic_markdown
+      url: https://pypi.org/p/academic_markdown
 
     steps:
       - uses: actions/checkout@v3
@@ -38,5 +37,3 @@ jobs:
 
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@release/v1.8
-        with:
-          repository-url: https://test.pypi.org/legacy/
