@@ -12,7 +12,7 @@ description = "CLI for converting Markdown to Latex using pandoc and Docker."
 readme = "README.md"
 requires-python = ">=3.7"
 dependencies = [
-  "typer[all]>=0.9.0",
+  "typer[all]",
   "pyyaml",
   "python-frontmatter"
 ]
