@@ -1,6 +1,6 @@
 # Builds on release and publishes to the PiPY repository
 
-name: Publish Bleeding-Edge Build
+name: Publish Release Build
 
 on:
   release:
