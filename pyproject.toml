@@ -23,7 +23,7 @@ classifiers = [
 ]
 
 [project.scripts]
-academic_markdown = "academic_markdown:app"
+academic_markdown = "academic_markdown.academic_markdown:app"
 
 [project.urls]
 "Homepage" = "https://github.com/cochaviz/academic_markdown_cli"
