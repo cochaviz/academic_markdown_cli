@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
-DOCKER_IMAGE="zoharcochavi/academic-markdown"
+DOCKER_IMAGE="ghcr.io/cochaviz/academic_markdown"
 PREAMBLE="academic_markdown (check_health.sh):"
+
 GOOD="✅"
 BAD="⚠️"
+INFO="ℹ️ "
 
 HEALTH=0
 
@@ -18,34 +20,29 @@ check_in_path() {
 }
 
 check_docker() {
-    check_in_path "docker" 
+    check_in_path docker
 
-    if ! [[ $? ]]; then
-        echo "$PREAMBLE ℹ️ Running docker health check..."
+    if [[ $? ]]; then
+        echo "$PREAMBLE $INFO Running docker health check..."
 
         docker run hello-world
-        if ! [[ $? ]]; then
+        if [[ $? ]]; then
             echo "$PREAMBLE $GOOD Docker correctly configured"
         else
             echo "$PREAMBLE $BAD Docker does not seem to be configured correctly"
             return 1
         fi
 
-        if ! [[ $(docker images | grep $DOCKER_IMAGE) ]]; then
+        if [[ $(docker images | grep $DOCKER_IMAGE) ]]; then
             echo "$PREAMBLE $GOOD Found '$DOCKER_IMAGE' docker image"
         else
-            echo "$PREAMBLE ℹ️ Could not find image '$DOCKER_IMAGE'."
-            echo "$PREAMBLE ℹ️ Running build_docker script to resolve..."
-
-            if [[ $(./scripts/build_docker.sh) ]]; then
-                echo "$PREAMBLE $GOOD Fixed Docker setup!"
-            else
-                echo "$PREAMBLE $BAD Could not fix Docker setup automatically, please check the logs to locate the issue."
-                return 1
-            fi
+            echo "$PREAMBLE $INFO Could not find image: '$DOCKER_IMAGE'."
+            echo "$PREAMBLE $INFO Pulling from ghcr.io..."
+          docker pull "$DOCKER_IMAGE"
+            
         fi
     else
-        echo "$PREAMBLE ℹ️ Not running docker health check since it cannot be found on path..."
+        echo "$PREAMBLE $INFO Not running docker health check since it cannot be found on path..."
         return 1
     fi
 
@@ -74,7 +71,7 @@ else
         fi
     done
 
-    echo "$PREAMBLE ℹ️ The following are optional dependencies."
+    echo "$PREAMBLE $INFO The following are optional dependencies."
 
     for dependency in "${dependencies_optional[@]}"; do
         check_in_path $dependency

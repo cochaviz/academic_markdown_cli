@@ -11,6 +11,7 @@ import logging
 import glob
 
 import typer
+from rich.progress import Progress, SpinnerColumn, TextColumn
 
 from importlib.resources import files
 
@@ -196,7 +197,7 @@ def build(
             --user {os.getuid()}:{os.getgid()} \
             --mount type=bind,source={os.getcwd()},target=/var/data \
             --workdir=/var/data \
-            zoharcochavi/academic-markdown"
+            ghcr.io/cochaviz/academic_markdown:main"
         )
 
     # source always refers to the folder which is being built
@@ -231,12 +232,7 @@ def build(
             f"build: It seems like you are trying to convert one or multiple non-latex/markdown files: {source_files}"
         )
 
-        if not input(
-            "Are you sure you want to build a non-latex/markdown file? [y/N]:"
-        ).lower() in {
-            "y",
-            "yes",
-        }:
+        if not typer.confirm("Are you sure you would like to build from a non-supported file format?"):
             logging.warning("Not processing further, exiting...")
             exit(0)
 
@@ -247,15 +243,22 @@ def build(
     out_filename = None
     returncode = 0
 
-    # if there is a metadata.yaml file, treat as collective document
-    if os.path.exists(f"{source}/metadata.yaml"):
-        out_filename, process = pandoc_run(pandoc, options, source_files, target)
-        returncode += process.returncode
-    # otherwise render each separately
-    else:
-        for source_file in source_files:
-            out_filename, process = pandoc_run(pandoc, options, [source_file], target)
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        transient=True,
+    ) as progress:
+        progress.add_task(description="Processing...", total=None)
+
+        # if there is a metadata.yaml file, treat as collective document
+        if os.path.exists(f"{source}/metadata.yaml"):
+            out_filename, process = pandoc_run(pandoc, options, source_files, target)
             returncode += process.returncode
+        # otherwise render each separately
+        else:
+            for source_file in source_files:
+                out_filename, process = pandoc_run(pandoc, options, [source_file], target)
+                returncode += process.returncode
 
     if returncode != 0:
         logging.critical(f"pandoc: Exited unexpectedly.")

@@ -12,10 +12,10 @@
 PREAMBLE="academic_markdown (build_docker.sh):"
 
 # if container is installed, its fine
-if [[ $(docker image ls | grep zoharcochavi/academic-markdown) ]]; then
+if [[ $(docker image ls | grep cochaviz/academic_markdown) ]]; then
     # unless someone really wants to build
     if [[ ! $# || ! $1 = "-f" ]]; then
-        echo "$PREAMBLE Found docker image (zoharcochavi/academic-markdown), skipping build..."
+        echo "$PREAMBLE Found docker image (cochaviz/academic_markdown), skipping build..."
         exit 0
     fi
     # remove -f option (the rest are build commands)
@@ -25,7 +25,7 @@ fi
 # if there are no build commands
 if [[ $# ]]; then
     echo "$PREAMBLE Attempting to pull from registry"
-    docker pull zoharcochavi/academic-markdown 
+    docker pull ghcr.io/cochaviz/academic_markdown:main
 fi
 
 # if there are explit build commands or the previous failed
