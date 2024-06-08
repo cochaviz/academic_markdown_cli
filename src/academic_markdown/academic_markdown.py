@@ -137,6 +137,11 @@ def _determine_target_file_name(source_files, target):
 def pandoc_run(
     pandoc: list[str], options: list[str], source_files: list[str], target: str
 ) -> tuple[str, subprocess.CompletedProcess]:
+    # beamer is a special case, as it is not a target but a pandoc option
+    if target == "beamer":
+        options.append("--to=beamer")
+        target = "pdf" 
+        
     out_filename = _determine_target_file_name(source_files, target)
     logging.info(f"Writing to {out_filename}...")
 
